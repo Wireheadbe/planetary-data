@@ -15,6 +15,7 @@ DOMAIN = "planetary_data"
 async def async_setup_entry(hass, config_entry, async_add_entities):
     coordinator = KIndexDataCoordinator(hass)
     await coordinator.async_config_entry_first_refresh()
+
     async_add_entities([KIndexSensor(coordinator)], update_before_add=True)
 
 class KIndexDataCoordinator(DataUpdateCoordinator):
@@ -28,9 +29,10 @@ class KIndexDataCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self):
         try:
-            return await hass.async_add_executor_job(fetch_k_index)
+            return await self.hass.async_add_executor_job(fetch_k_index)
         except Exception as err:
-            raise UpdateFailed(f"Error fetching K-index: {err}")
+            _LOGGER.exception("Failed to fetch K-index data")
+            raise UpdateFailed(err)
 
 class KIndexSensor(CoordinatorEntity, SensorEntity):
     def __init__(self, coordinator):
@@ -47,4 +49,3 @@ class KIndexSensor(CoordinatorEntity, SensorEntity):
         return {
             "time_tag": self.coordinator.data.get("time_tag"),
         }
-
