@@ -8,6 +8,8 @@ from homeassistant.helpers.update_coordinator import (
     UpdateFailed,
 )
 
+from .api import fetch_k_index
+
 _LOGGER = logging.getLogger(__name__)
 
 DOMAIN = "planetary_data"
