@@ -14,6 +14,14 @@ DOMAIN = "planetary_data"
 
 URL = "https://services.swpc.noaa.gov/json/planetary_k_index_1m.json"
 
+def fetch_k_index():
+    resp = requests.get(URL, timeout=10)
+    resp.raise_for_status()                                                                              
+    data = resp.json()
+    if not data:
+        return None
+    return data[-1]  # latest entry
+
 async def async_setup_entry(hass, config_entry, async_add_entities):
     coordinator = KIndexDataCoordinator(hass)
     await coordinator.async_config_entry_first_refresh()
@@ -33,14 +41,6 @@ class KIndexDataCoordinator(DataUpdateCoordinator):
             return await hass.async_add_executor_job(fetch_k_index)
         except Exception as err:
             raise UpdateFailed(f"Error fetching K-index: {err}")
-
-def fetch_k_index():
-    resp = requests.get(URL, timeout=10)
-    resp.raise_for_status()
-    data = resp.json()
-    if not data:
-        return None
-    return data[-1]  # latest entry
 
 class KIndexSensor(CoordinatorEntity, SensorEntity):
     def __init__(self, coordinator):
