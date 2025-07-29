@@ -1,7 +1,7 @@
 {
   "domain": "planetary_data",
   "name": "Planetary Data",
-  "version": "1.4",
+  "version": "1.5",
   "documentation": "https://github.com/Wireheadbe/planetary-data",
   "dependencies": [],
   "codeowners": [],
