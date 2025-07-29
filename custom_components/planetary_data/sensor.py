@@ -15,12 +15,9 @@ DOMAIN = "planetary_data"
 URL = "https://services.swpc.noaa.gov/json/planetary_k_index_1m.json"
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
-    pass  # Not using config entries for this basic example
-
-async def async_setup_platform(hass, config_entry, async_add_entities):
     coordinator = KIndexDataCoordinator(hass)
     await coordinator.async_config_entry_first_refresh()
-    async_add_entities([KIndexSensor(coordinator)])
+    async_add_entities([KIndexSensor(coordinator)], update_before_add=True)
 
 class KIndexDataCoordinator(DataUpdateCoordinator):
     def __init__(self, hass):
