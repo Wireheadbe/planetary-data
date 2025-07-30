@@ -41,6 +41,7 @@ class KIndexSensor(CoordinatorEntity, SensorEntity):
         super().__init__(coordinator)
         self._attr_name = "Planetary K-Index"
         self._attr_unique_id = "planetary_k_index"
+        self._attr_state_class = "measurement"
 
     @property
     def native_value(self):
